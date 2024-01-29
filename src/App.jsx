@@ -33,32 +33,38 @@ const App = () => {
   const [socialId, setSocialId] = useState("");
   const [username, setUsername] = useState();
 
-  useEffect(() => {
-    Axios.get(`https://api.github.com/users/ashishmohanty10`).then((res) => {
-      console.log(res);
-      setName(res.data.name);
-      setImg(res.data.avatar_url);
-      setId(res.data.login);
-      setBio(res.data.bio);
-      setRepos(res.data.public_repos);
-      setFollowers(res.data.followers);
-      setFollowing(res.data.following);
-      setLocation(res.data.location);
-      setCompany(res.data.company);
-      setDate(res.data.created_at);
-      setGitUrl(res.data.html_url);
-      setSocialId(res.data.twitter_username);
-    });
-  }, []);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the username is not empty
+    if (username.trim() !== "") {
+      try {
+        const res = await Axios.get(`https://api.github.com/users/${username}`);
+        console.log(res);
+        // Handle response data
+        setName(res.data.name);
+        setImg(res.data.avatar_url);
+        setId(res.data.login);
+        setBio(res.data.bio);
+        setRepos(res.data.public_repos);
+        setFollowers(res.data.followers);
+        setFollowing(res.data.following);
+        setLocation(res.data.location);
+        setCompany(res.data.company);
+        setDate(res.data.created_at);
+        setGitUrl(res.data.html_url);
+        setSocialId(res.data.twitter_username);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle error state
+      }
+    }
   };
 
   return (
     <div className={darkMode ? "dark" : "light"}>
       <div className="flex items-center justify-center w-full h-screen m-auto dark:bg-primaryDarkColor">
-        <div className=" w-[700px] h-[600px] p-2">
+        <div className="w-[900px] h-[600px] p-2">
           {/* title */}
 
           <div className="flex items-center justify-between mb-8">
@@ -90,6 +96,8 @@ const App = () => {
             <input
               type="text"
               placeholder="Search Users..."
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 outline-none bg-inherit dark:text-primaryTextColor"
             />
             <button
@@ -102,111 +110,117 @@ const App = () => {
 
           {/* Output */}
 
-          <div className="p-2 rounded-md shadow-md dark:bg-boxColor">
-            <div className="flex items-start justify-between gap-5">
-              {/* image */}
-              <div className="p-4 rounded-full dark:bg-primaryDarkColor">
-                <img
-                  src={img}
-                  alt=""
-                  className="w-[100px] h-[100px] rounded-full object-center"
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex items-start justify-between">
-                  {/* userinfo */}
-                  <div>
-                    <h2 className="mb-1 text-lg font-medium dark:text-btnColor">
-                      {name ? name : "No name "}
-                    </h2>
-                    <p className="mb-5 text-sm dark:text-primaryTextColor">
-                      @{id}
-                    </p>
-
-                    <p className="text-sm dark:text-primaryTextColor opacity-70">
-                      {bio ? bio : "This profile has no bio"}
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm dark:text-primaryTextColor">
-                      Joined {dateFormat(date, "mmmm dS, yyyy")}
-                    </p>
-                  </div>
+          {!username ? (
+            <div className="p-2 rounded-md shadow-md dark:bg-boxColor">
+              User Not Availble
+            </div>
+          ) : (
+            <div className="w-full p-2 rounded-md shadow-md dark:bg-boxColor">
+              <div className="flex items-start justify-between gap-5">
+                {/* image */}
+                <div className="p-4 overflow-hidden rounded-full dark:bg-primaryDarkColor">
+                  <img
+                    src={img}
+                    alt=""
+                    className="w-[80px] h-[80px] rounded-full object-center "
+                  />
                 </div>
 
-                {/* Repo info */}
+                <div className="flex flex-col">
+                  <div className="flex items-start justify-between">
+                    {/* userinfo */}
+                    <div>
+                      <h2 className="mb-1 text-lg font-medium dark:text-btnColor">
+                        {name ? name : "No name "}
+                      </h2>
+                      <p className="mb-5 text-sm dark:text-primaryTextColor">
+                        @{id}
+                      </p>
 
-                <div className="flex items-center justify-between p-4 mt-8 mb-8 rounded-md bg-primaryDarkColor">
-                  <div>
-                    <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                      Repos
-                    </h2>
-                    <p className="text-xl font-semibold dark:text-primaryTextColor">
-                      {repos}
-                    </p>
+                      <p className="text-sm dark:text-primaryTextColor opacity-70">
+                        {bio ? bio : "This profile has no bio"}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-xs dark:text-primaryTextColor">
+                        Joined {dateFormat(date, "mmmm dS, yyyy")}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                      Followers
-                    </h2>
-                    <p className="text-xl font-semibold dark:text-primaryTextColor">
-                      {followers}
-                    </p>
+                  {/* Repo info */}
+
+                  <div className="flex items-center justify-between p-4 mt-8 mb-8 rounded-md bg-primaryDarkColor">
+                    <div>
+                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                        Repos
+                      </h2>
+                      <p className="text-xl font-semibold dark:text-primaryTextColor">
+                        {repos}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                        Followers
+                      </h2>
+                      <p className="text-xl font-semibold dark:text-primaryTextColor">
+                        {followers}
+                      </p>
+                    </div>
+
+                    <div>
+                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                        Following
+                      </h2>
+                      <p className="text-xl font-semibold dark:text-primaryTextColor">
+                        {following}
+                      </p>
+                    </div>
                   </div>
 
-                  <div>
-                    <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                      Following
-                    </h2>
-                    <p className="text-xl font-semibold dark:text-primaryTextColor">
-                      {following}
-                    </p>
-                  </div>
-                </div>
+                  {/* links */}
 
-                {/* links */}
+                  <div className="grid items-center justify-between grid-cols-2 gap-x-10">
+                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                      <FaLocationDot className="text-lg" />
+                      <p className="text-sm">
+                        {location ? location : "No Location"}
+                      </p>
+                    </div>
 
-                <div className="grid items-center justify-between grid-cols-2 gap-x-10">
-                  <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                    <FaLocationDot className="text-lg" />
-                    <p className="text-sm">
-                      {location ? location : "No Location"}
-                    </p>
+                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                      <FaTwitter className="text-lg" />
+                      <a href="#" className="text-sm">
+                        {socialId ? socialId : "Not Available"}
+                      </a>
+                    </div>
                   </div>
 
-                  <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                    <FaTwitter className="text-lg" />
-                    <a href="#" className="text-sm">
-                      {socialId ? socialId : "Not Available"}
-                    </a>
-                  </div>
-                </div>
+                  <div className="grid items-center justify-between grid-cols-2 mt-4 gap-x-10">
+                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                      <FaLink className="text-lg" />
+                      <a
+                        href={gitUrl}
+                        title={gitUrl}
+                        className="overflow-hidden text-ellipsis hover:underline opacity-80"
+                      >
+                        {gitUrl ? gitUrl : "Not Available"}
+                      </a>
+                    </div>
 
-                <div className="grid items-center justify-between grid-cols-2 mt-4 gap-x-10">
-                  <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                    <FaLink className="text-lg" />
-                    <a
-                      href={gitUrl}
-                      title={gitUrl}
-                      className="overflow-hidden text-ellipsis hover:underline opacity-80"
-                    >
-                      {gitUrl ? gitUrl : "Not Available"}
-                    </a>
-                  </div>
-
-                  <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                    <Building className="text-lg" />
-                    <a href="#" className="text-sm">
-                      {company ? company : "Not Available"}
-                    </a>
+                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                      <Building className="text-lg" />
+                      <a href="#" className="text-sm">
+                        {company ? company : "Not Available"}
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

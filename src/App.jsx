@@ -31,10 +31,10 @@ const App = () => {
   const [date, setDate] = useState();
   const [gitUrl, setGitUrl] = useState("");
   const [socialId, setSocialId] = useState("");
-  const [username, setUsername] = useState("ashishmohanty10");
+  const [username, setUsername] = useState();
 
   useEffect(() => {
-    Axios.get(`https://api.github.com/users/${username}`).then((res) => {
+    Axios.get(`https://api.github.com/users/ashishmohanty10`).then((res) => {
       console.log(res);
       setName(res.data.name);
       setImg(res.data.avatar_url);
@@ -49,7 +49,7 @@ const App = () => {
       setGitUrl(res.data.html_url);
       setSocialId(res.data.twitter_username);
     });
-  }, [username]);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -90,8 +90,6 @@ const App = () => {
             <input
               type="text"
               placeholder="Search Users..."
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 outline-none bg-inherit dark:text-primaryTextColor"
             />
             <button
@@ -122,7 +120,9 @@ const App = () => {
                     <h2 className="mb-1 text-lg font-medium dark:text-btnColor">
                       {name ? name : "No name "}
                     </h2>
-                    <p className="mb-5 dark:text-primaryTextColor">@{id}</p>
+                    <p className="mb-5 text-sm dark:text-primaryTextColor">
+                      @{id}
+                    </p>
 
                     <p className="text-sm dark:text-primaryTextColor opacity-70">
                       {bio ? bio : "This profile has no bio"}

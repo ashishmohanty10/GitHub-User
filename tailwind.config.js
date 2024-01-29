@@ -18,6 +18,12 @@ export default {
         primaryFont: "Inter",
         secondarFont: "Space Mono",
       },
+      colors: {
+        primaryDarkColor: "#141c2f",
+        boxColor: "#1f2a48",
+        btnColor: "#0079fe",
+        primaryTextColor: "#eff0f2",
+      },
     },
   },
   plugins: [],

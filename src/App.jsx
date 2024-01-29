@@ -19,45 +19,19 @@ const App = () => {
   const now = new Date();
   const [darkMode, setDarkMode] = useAtom(darkModeAtom);
   const handleTheme = () => setDarkMode(!darkMode);
-  const [name, setName] = useState("");
-  const [id, setId] = useState("");
-  const [bio, setBio] = useState("");
-  const [img, setImg] = useState();
-  const [repos, setRepos] = useState();
-  const [followers, setFollowers] = useState();
-  const [following, setFollowing] = useState();
-  const [location, setLocation] = useState("");
-  const [company, setCompany] = useState("");
-  const [date, setDate] = useState();
-  const [gitUrl, setGitUrl] = useState("");
-  const [socialId, setSocialId] = useState("");
+  const [data, setData] = useState(null);
   const [username, setUsername] = useState();
+  // const [message, setMessage] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if the username is not empty
-    if (username.trim() !== "") {
-      try {
-        const res = await Axios.get(`https://api.github.com/users/${username}`);
-        console.log(res);
-        // Handle response data
-        setName(res.data.name);
-        setImg(res.data.avatar_url);
-        setId(res.data.login);
-        setBio(res.data.bio);
-        setRepos(res.data.public_repos);
-        setFollowers(res.data.followers);
-        setFollowing(res.data.following);
-        setLocation(res.data.location);
-        setCompany(res.data.company);
-        setDate(res.data.created_at);
-        setGitUrl(res.data.html_url);
-        setSocialId(res.data.twitter_username);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        // Handle error state
-      }
+    if (username == "") {
+      alert("plz type username");
+    } else {
+      const res = await Axios.get(`https://api.github.com/users/${username}`);
+      console.log("res", res);
+      setData(res.data);
     }
   };
 
@@ -110,117 +84,123 @@ const App = () => {
 
           {/* Output */}
 
-          {!username ? (
-            <div className="p-2 rounded-md shadow-md dark:bg-boxColor">
-              User Not Availble
-            </div>
-          ) : (
-            <div className="w-full p-2 rounded-md shadow-md dark:bg-boxColor">
-              <div className="flex items-start justify-between gap-5">
-                {/* image */}
-                <div className="p-4 overflow-hidden rounded-full dark:bg-primaryDarkColor">
-                  <img
-                    src={img}
-                    alt=""
-                    className="w-[80px] h-[80px] rounded-full object-center "
-                  />
+          <div className="w-full h-[400px]">
+            {!data ? (
+              <div className="p-2 rounded-md shadow-md dark:bg-boxColor">
+                <div className="flex items-start justify-between">
+                  <h1 className="text-red-500">Please type ur username</h1>{" "}
                 </div>
-
-                <div className="flex flex-col">
-                  <div className="flex items-start justify-between">
-                    {/* userinfo */}
-                    <div>
-                      <h2 className="mb-1 text-lg font-medium dark:text-btnColor">
-                        {name ? name : "No name "}
-                      </h2>
-                      <p className="mb-5 text-sm dark:text-primaryTextColor">
-                        @{id}
-                      </p>
-
-                      <p className="text-sm dark:text-primaryTextColor opacity-70">
-                        {bio ? bio : "This profile has no bio"}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs dark:text-primaryTextColor">
-                        Joined {dateFormat(date, "mmmm dS, yyyy")}
-                      </p>
-                    </div>
+              </div>
+            ) : (
+              <div className="w-full p-2 rounded-md shadow-md dark:bg-boxColor">
+                <div className="flex items-start justify-between gap-5 ">
+                  {/* image */}
+                  <div className="p-4 overflow-hidden rounded-full dark:bg-primaryDarkColor">
+                    <img
+                      src={data.avatar_url}
+                      alt=""
+                      className="w-[80px] h-[80px] rounded-full object-center "
+                    />
                   </div>
 
-                  {/* Repo info */}
+                  <div className="flex flex-col">
+                    <div className="flex items-start justify-between">
+                      {/* userdata */}
+                      <div>
+                        <h2 className="mb-1 text-lg font-medium dark:text-btnColor">
+                          {data.name ? data.name : "No name "}
+                        </h2>
+                        <p className="mb-5 text-sm dark:text-primaryTextColor">
+                          @{data.login}
+                        </p>
 
-                  <div className="flex items-center justify-between p-4 mt-8 mb-8 rounded-md bg-primaryDarkColor">
-                    <div>
-                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                        Repos
-                      </h2>
-                      <p className="text-xl font-semibold dark:text-primaryTextColor">
-                        {repos}
-                      </p>
+                        <p className="text-sm dark:text-primaryTextColor opacity-70">
+                          {data.bio ? data.bio : "This profile has no bio"}
+                        </p>
+                      </div>
+
+                      <div>
+                        <p className="text-xs dark:text-primaryTextColor">
+                          Joined {dateFormat(data.created_at, "mmmm dS, yyyy")}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                        Followers
-                      </h2>
-                      <p className="text-xl font-semibold dark:text-primaryTextColor">
-                        {followers}
-                      </p>
+                    {/* Repo data */}
+
+                    <div className="flex items-center justify-between p-4 mt-8 mb-8 rounded-md bg-primaryDarkColor">
+                      <div>
+                        <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                          Repos
+                        </h2>
+                        <p className="text-xl font-semibold dark:text-primaryTextColor">
+                          {data.public_repos}
+                        </p>
+                      </div>
+
+                      <div>
+                        <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                          Followers
+                        </h2>
+                        <p className="text-xl font-semibold dark:text-primaryTextColor">
+                          {data.followers}
+                        </p>
+                      </div>
+
+                      <div>
+                        <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
+                          Following
+                        </h2>
+                        <p className="text-xl font-semibold dark:text-primaryTextColor">
+                          {data.following}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <h2 className="text-sm font-medium uppercase dark:text-primaryTextColor">
-                        Following
-                      </h2>
-                      <p className="text-xl font-semibold dark:text-primaryTextColor">
-                        {following}
-                      </p>
-                    </div>
-                  </div>
+                    {/* links */}
 
-                  {/* links */}
+                    <div className="grid items-center justify-between grid-cols-2 gap-x-10">
+                      <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                        <FaLocationDot className="text-lg" />
+                        <p className="text-sm">
+                          {data.location ? data.location : "No Location"}
+                        </p>
+                      </div>
 
-                  <div className="grid items-center justify-between grid-cols-2 gap-x-10">
-                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                      <FaLocationDot className="text-lg" />
-                      <p className="text-sm">
-                        {location ? location : "No Location"}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                      <FaTwitter className="text-lg" />
-                      <a href="#" className="text-sm">
-                        {socialId ? socialId : "Not Available"}
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="grid items-center justify-between grid-cols-2 mt-4 gap-x-10">
-                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                      <FaLink className="text-lg" />
-                      <a
-                        href={gitUrl}
-                        title={gitUrl}
-                        className="overflow-hidden text-ellipsis hover:underline opacity-80"
-                      >
-                        {gitUrl ? gitUrl : "Not Available"}
-                      </a>
+                      <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                        <FaTwitter className="text-lg" />
+                        <a href="#" className="text-sm">
+                          {data.twitter_username
+                            ? data.twitter_username
+                            : "Not Available"}
+                        </a>
+                      </div>
                     </div>
 
-                    <div className="flex items-center gap-2 dark:text-primaryTextColor">
-                      <Building className="text-lg" />
-                      <a href="#" className="text-sm">
-                        {company ? company : "Not Available"}
-                      </a>
+                    <div className="grid items-center justify-between grid-cols-2 mt-4 gap-x-10">
+                      <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                        <FaLink className="text-lg" />
+                        <a
+                          href={data.url}
+                          title={data.url}
+                          className="overflow-hidden text-ellipsis hover:underline opacity-80"
+                        >
+                          {data.url ? data.url : "Not Available"}
+                        </a>
+                      </div>
+
+                      <div className="flex items-center gap-2 dark:text-primaryTextColor">
+                        <Building className="text-lg" />
+                        <a href="#" className="text-sm">
+                          {data.company ? data.company : "Not Available"}
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
     </div>

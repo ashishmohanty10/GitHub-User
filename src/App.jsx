@@ -37,7 +37,7 @@ const App = () => {
     <section className={darkMode ? "dark" : ""}>
       <section className="dark:bg-primaryBG ">
         <div className="container w-full h-screen flex justify-center items-center">
-          <div className="h-[600px] min-w-[700px]">
+          <div className="h-[600px] md:min-w-[700px]">
             {/* top nav */}
             <div className="py-5 flex justify-between items-center w-full mb-4">
               <h1 className="dark:text-textColor font-bold text-2xl">
@@ -147,7 +147,7 @@ const App = () => {
                           <MdLocationOn className="text-slate-600 text-3xl dark:text-iconColor" />
 
                           <p className="text-slate-700 font-normal text-sm dark:text-textColor opacity-60">
-                            {data ? data.location : "Not Availble"}
+                            {data.location ? data.location : "Not Availble"}
                           </p>
                         </div>
 
@@ -155,7 +155,9 @@ const App = () => {
                           <FaTwitter className="text-slate-600 text-3xl dark:text-iconColor" />
 
                           <p className="text-slate-700 font-normal text-sm dark:text-textColor opacity-60">
-                            {data ? data.twitter_username : "Not Availble"}
+                            {data.twitter_username
+                              ? data.twitter_username
+                              : "Not Availble"}
                           </p>
                         </div>
                       </div>
@@ -165,8 +167,12 @@ const App = () => {
                         <div className="flex items-center gap-2">
                           <FaLink className="text-slate-600 text-3xl dark:text-iconColor" />
 
-                          <a className="text-slate-700 font-normal text-sm dark:text-textColor hover:underline opacity-60 max-w-[220px] overflow-hidden text-ellipsis">
-                            {data ? data.url : "Not Availble"}
+                          <a
+                            href={data.html_url}
+                            target="_blank"
+                            className="text-slate-700 font-normal text-sm dark:text-textColor hover:underline opacity-60 max-w-[220px] overflow-hidden text-ellipsis"
+                          >
+                            {data.html_url ? data.html_url : "Not Availble"}
                           </a>
                         </div>
 
@@ -174,7 +180,7 @@ const App = () => {
                           <FaBuilding className="text-slate-600 text-3xl dark:text-iconColor" />
 
                           <p className="text-slate-700 font-normal text-sm dark:text-textColor opacity-60">
-                            {data ? data.company : "Not Availble"}
+                            {data.company ? data.company : "Not Availble"}
                           </p>
                         </div>
                       </div>

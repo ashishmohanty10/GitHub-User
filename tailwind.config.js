@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     container: {
       center: true,
@@ -14,15 +14,12 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        primaryFont: "Inter",
-        secondarFont: "Space Mono",
-      },
       colors: {
-        primaryDarkColor: "#141c2f",
-        boxColor: "#1f2a48",
-        btnColor: "#0079fe",
-        primaryTextColor: "#eff0f2",
+        primaryBG: "#141c2f",
+        boxBG: "#1f2a48",
+        textColor: "#fefefe",
+        blueBox: "#0079fe",
+        iconColor: "#4b6a9b",
       },
     },
   },

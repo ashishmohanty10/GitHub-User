@@ -18,7 +18,6 @@ import LoaderComponent from "./loading";
 
 const Page = () => {
   const [username, setUsername] = useState("Octocat");
-  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const { data, refetch, isLoading } = useQuery<DataProp>({
     queryKey: ["Data"],
@@ -97,7 +96,7 @@ const Page = () => {
               </div>
 
               {/* Right side - User information */}
-              <div className="">
+              <div>
                 <p className="text-base font-medium text-slate-400 text-balance mb-6 overflow-hidden truncate">
                   {data?.bio ? (
                     <span>{data.bio}</span>
@@ -107,7 +106,7 @@ const Page = () => {
                 </p>
 
                 {/* Stats */}
-                <div className="p-4 rounded-lg dark:bg-[#141c30] grid grid-cols-3 mb-6">
+                <div className="p-4 rounded-lg dark:bg-[#141c30] grid grid-cols-3 mb-6   ">
                   <div>
                     <p className="mb-2">Repo</p>
                     <p>
@@ -141,7 +140,7 @@ const Page = () => {
                 </div>
 
                 {/* Links */}
-                <div className="grid grid-cols-2 gap-3 text-ellipsis">
+                <div className="grid grid-cols-2 gap-3 text-ellipsis ">
                   <div className="flex items-center gap-x-2 mb-2">
                     <MapPin />
                     <p className="truncate">

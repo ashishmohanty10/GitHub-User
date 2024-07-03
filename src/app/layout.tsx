@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
+import QueryContainer from "@/components/QueryProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const space_Mono = Space_Mono({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +17,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={space_Mono.className}>
+        <ThemeProvider attribute="class">
+          <QueryContainer>{children}</QueryContainer>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

@@ -2,6 +2,7 @@
 
 import ThemeToggler from "@/components/ThemeToggler";
 import { DataProp } from "@/types/types";
+import { useQuery } from "@tanstack/react-query";
 import {
   BuildingIcon,
   LinkIcon,
@@ -11,41 +12,28 @@ import {
   SearchIcon,
 } from "lucide-react";
 import Image from "next/image";
-import React, { useState } from "react";
+import Link from "next/link";
+import React, { FormEvent, Suspense, useState } from "react";
+import LoaderComponent from "./loading";
 
 const Page = () => {
-  const [username, setUsername] = useState("");
-  const [userData, setUserData] = useState<DataProp | null>(null);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("Octocat");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  async function getData() {
-    try {
-      const response = await fetch(`https://api.github.com/users/${username}`);
-      if (!response.ok) {
-        throw new Error("User not found");
-      }
-      const data = await response.json();
+  const { data, refetch, isLoading } = useQuery<DataProp>({
+    queryKey: ["Data"],
+    queryFn: () =>
+      fetch(`https://api.github.com/users/${username}`).then((res) =>
+        res.json()
+      ),
+  });
 
-      setUserData(data);
-      setError(false);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      setUserData(null);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    refetch();
+  };
 
-  if (!loading) {
-    return (
-      <div className="flex justify-center items-center w-full h-[100vh]">
-        <Loader2Icon className="animate-spin" />
-      </div>
-    );
-  }
+  if (isLoading) return <LoaderComponent />;
 
   return (
     <div className="dark:bg-[#141c30] w-full h-screen flex justify-center items-center">
@@ -58,7 +46,10 @@ const Page = () => {
 
         <div className="flex flex-col space-y-10">
           {/* Input fields */}
-          <div className="dark:bg-[#1F2A48] flex items-center gap-x-4 px-3 py-2 rounded-lg shadow-lg">
+          <form
+            onSubmit={handleSubmit}
+            className="dark:bg-[#1F2A48] flex items-center gap-x-4 px-3 py-2 rounded-lg shadow-lg"
+          >
             <SearchIcon size={30} className="text-blue-600" />
             <input
               type="text"
@@ -70,22 +61,21 @@ const Page = () => {
             <button
               type="submit"
               className="text-white py-2 px-4 bg-blue-600 rounded-lg"
-              onClick={() => getData()}
             >
               Search
             </button>
-          </div>
+          </form>
 
-          {error ? (
-            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit grid grid-cols-4 rounded-lg shadow-lg">
+          {data?.message ? (
+            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit md:grid md:grid-cols-4 rounded-lg shadow-lg">
               <p className="text-red-600 text-center">No user found</p>
             </div>
-          ) : userData ? (
-            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit grid grid-cols-4 rounded-lg shadow-lg">
-              {/* Left side*/}
-              <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center">
+          ) : data ? (
+            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit md:grid md:grid-cols-4 rounded-lg shadow-lg">
+              {/* Left side */}
+              <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-">
                 <Image
-                  src={userData.avatar_url}
+                  src={data?.avatar_url ?? ""}
                   alt="Profile Picture"
                   width={100}
                   height={100}
@@ -95,33 +85,55 @@ const Page = () => {
               {/* Right side - User information */}
               <div className="col-span-3">
                 <div className="flex justify-between mb-2 text-ellipsis">
-                  <h2 className="text-lg font-semibold">{userData.name}</h2>
+                  <h2 className="text-lg font-semibold">{data?.name}</h2>
                   <p className="text-slate-500 font-medium text-sm truncate">
-                    Joined {new Date(userData.created_at).toLocaleDateString()}
+                    Joined {new Date(data?.created_at).toLocaleDateString()}
                   </p>
                 </div>
 
                 <p className="text-sm font-semibold text-blue-600 mb-6">
-                  @{userData.login}
+                  @{data.login}
                 </p>
 
                 <p className="text-base font-medium text-slate-400 text-balance mb-6 overflow-hidden truncate">
-                  {userData.bio}
+                  {data?.bio ? (
+                    <span>{data.bio}</span>
+                  ) : (
+                    <span>This profile has no bio</span>
+                  )}
                 </p>
 
                 {/* Stats */}
                 <div className="p-4 rounded-lg dark:bg-[#141c30] grid grid-cols-3 mb-6">
                   <div>
                     <p className="mb-2">Repo</p>
-                    <p>{userData.public_repos}</p>
+                    <p>
+                      {data?.public_repos ? (
+                        <span>{data?.public_repos}</span>
+                      ) : (
+                        <span>0</span>
+                      )}
+                    </p>
                   </div>
                   <div>
                     <p className="mb-2">Followers</p>
-                    <p>{userData.followers}</p>
+                    <p>
+                      {data?.followers ? (
+                        <span>{data?.followers}</span>
+                      ) : (
+                        <span>0</span>
+                      )}
+                    </p>
                   </div>
                   <div>
                     <p className="mb-2">Following</p>
-                    <p>{userData.following}</p>
+                    <p>
+                      {data?.following ? (
+                        <span>{data?.following}</span>
+                      ) : (
+                        <span>0</span>
+                      )}
+                    </p>
                   </div>
                 </div>
 
@@ -129,19 +141,51 @@ const Page = () => {
                 <div className="grid grid-cols-2 gap-3 text-ellipsis">
                   <div className="flex items-center gap-x-2 mb-2">
                     <MapPin />
-                    <p className="truncate">{userData.location}</p>
+                    <p className="truncate">
+                      {data?.location ? (
+                        <span>{data?.location}</span>
+                      ) : (
+                        <span className="text-base font-medium text-slate-400">
+                          Not Available
+                        </span>
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center gap-x-2 mb-2">
                     <Mail />
-                    <p className="truncate">{userData.email || "N/A"}</p>
+                    <p className="truncate">
+                      {data?.email ? (
+                        <span>{data?.email}</span>
+                      ) : (
+                        <span className="text-base font-medium text-slate-400">
+                          Not Available
+                        </span>
+                      )}
+                    </p>
                   </div>
                   <div className="flex items-center gap-x-2">
                     <LinkIcon />
-                    <p className="truncate">{userData.blog}</p>
+                    <Link href={data?.blog ?? "#"} className="truncate">
+                      {data?.blog ? (
+                        <span>{data?.blog}</span>
+                      ) : (
+                        <span className="text-base font-medium text-slate-400">
+                          Not Available
+                        </span>
+                      )}
+                    </Link>
                   </div>
                   <div className="flex items-center gap-x-2">
                     <BuildingIcon />
-                    <p className="truncate">{userData.company}</p>
+                    <p className="truncate">
+                      {data?.company ? (
+                        <span>{data?.company}</span>
+                      ) : (
+                        <span className="text-base font-medium text-slate-400">
+                          Not Available
+                        </span>
+                      )}
+                    </p>
                   </div>
                 </div>
               </div>

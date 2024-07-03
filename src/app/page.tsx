@@ -37,7 +37,7 @@ const Page = () => {
 
   return (
     <div className="dark:bg-[#141c30] w-full h-screen flex justify-center items-center">
-      <div className="w-[700px] h-[600px] p-2">
+      <div className="w-[700px] h-[600px] p-2 min-w-[400px]">
         {/* Heading */}
         <div className="flex items-center justify-between mb-5">
           <h1 className="text-2xl font-bold">devfinder</h1>
@@ -71,30 +71,33 @@ const Page = () => {
               <p className="text-red-600 text-center">No user found</p>
             </div>
           ) : data ? (
-            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit md:grid md:grid-cols-4 rounded-lg shadow-lg">
+            <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit rounded-lg shadow-lg">
               {/* Left side */}
-              <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-">
-                <Image
-                  src={data?.avatar_url ?? ""}
-                  alt="Profile Picture"
-                  width={100}
-                  height={100}
-                />
-              </div>
+              <div className="grid grid-cols-3">
+                <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-">
+                  <Image
+                    src={data?.avatar_url ?? ""}
+                    alt="Profile Picture"
+                    width={100}
+                    height={100}
+                  />
+                </div>
 
-              {/* Right side - User information */}
-              <div className="col-span-3">
-                <div className="flex justify-between mb-2 text-ellipsis">
-                  <h2 className="text-lg font-semibold">{data?.name}</h2>
+                <div className="col-span-2 md:flex justify-between  text-ellipsis">
+                  <div>
+                    <h2 className="text-lg font-semibold">{data?.name}</h2>
+                    <p className="text-sm font-semibold text-blue-600 mb-6">
+                      @{data.login}
+                    </p>
+                  </div>
                   <p className="text-slate-500 font-medium text-sm truncate">
                     Joined {new Date(data?.created_at).toLocaleDateString()}
                   </p>
                 </div>
+              </div>
 
-                <p className="text-sm font-semibold text-blue-600 mb-6">
-                  @{data.login}
-                </p>
-
+              {/* Right side - User information */}
+              <div className="">
                 <p className="text-base font-medium text-slate-400 text-balance mb-6 overflow-hidden truncate">
                   {data?.bio ? (
                     <span>{data.bio}</span>

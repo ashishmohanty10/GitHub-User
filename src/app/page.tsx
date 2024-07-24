@@ -3,17 +3,10 @@
 import ThemeToggler from "@/components/ThemeToggler";
 import { DataProp } from "@/types/types";
 import { useQuery } from "@tanstack/react-query";
-import {
-  BuildingIcon,
-  LinkIcon,
-  Loader2Icon,
-  Mail,
-  MapPin,
-  SearchIcon,
-} from "lucide-react";
+import { BuildingIcon, LinkIcon, Mail, MapPin, SearchIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { FormEvent, Suspense, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import LoaderComponent from "./loading";
 
 const Page = () => {

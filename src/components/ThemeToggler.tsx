@@ -10,28 +10,19 @@ type Props = {};
 
 export default function ThemeToggler({}: Props) {
   const { resolvedTheme, theme, setTheme } = useTheme();
-  const [isMounted, setIsMounted] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   return (
     <div>
-      {isMounted ? (
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => {
-              setTheme(resolvedTheme === "light" ? "dark" : "light");
-            }}
-            className="text-2xl"
-          >
-            {theme === "light" ? <MoonIcon /> : <SunIcon />}
-          </button>
-        </div>
-      ) : (
-        ""
-      )}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={() => {
+            setTheme(resolvedTheme === "light" ? "dark" : "light");
+          }}
+          className="text-2xl"
+        >
+          {theme === "light" ? <MoonIcon /> : <SunIcon />}
+        </button>
+      </div>
     </div>
   );
 }

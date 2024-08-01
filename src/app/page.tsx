@@ -66,7 +66,7 @@ const Page = () => {
             <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit rounded-lg shadow-lg">
               {/* Left side */}
               <div className="grid grid-cols-3">
-                <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-">
+                <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-0">
                   <Image
                     src={data?.avatar_url ?? ""}
                     alt="Profile Picture"

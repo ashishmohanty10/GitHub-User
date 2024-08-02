@@ -99,7 +99,7 @@ const Page = () => {
                 </p>
 
                 {/* Stats */}
-                <div className="p-4 rounded-lg dark:bg-[#141c30] grid grid-cols-3 mb-6   ">
+                <div className="p-4 rounded-lg bg-slate-200 dark:bg-[#141c30] grid grid-cols-3 mb-6   shadow-md">
                   <div>
                     <p className="mb-2">Repo</p>
                     <p>

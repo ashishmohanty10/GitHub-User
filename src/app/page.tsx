@@ -10,7 +10,7 @@ import React, { FormEvent, useState } from "react";
 import LoaderComponent from "./loading";
 
 const Page = () => {
-  const [username, setUsername] = useState("Octocat");
+  const [username, setUsername] = useState("ashishmohanty10");
 
   const { data, refetch, isLoading } = useQuery<DataProp>({
     queryKey: ["Data"],

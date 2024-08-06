@@ -65,7 +65,7 @@ const Page = () => {
           ) : data ? (
             <div className="dark:bg-[#1F2A48] px-3 py-4 w-full h-fit rounded-lg shadow-lg">
               {/* Left side */}
-              <div className="grid grid-cols-3">
+              <div className="grid grid-cols-3 mb-4">
                 <div className="overflow-hidden col-span-1 w-[100px] h-[100px] bg-slate-400 rounded-full flex items-center justify-center mb-5 md:mb-0">
                   <Image
                     src={data?.avatar_url ?? ""}
@@ -75,7 +75,7 @@ const Page = () => {
                   />
                 </div>
 
-                <div className="col-span-2 md:flex justify-between  text-ellipsis">
+                <div className="col-span-2 md:flex justify-between text-ellipsis">
                   <div>
                     <h2 className="text-lg font-semibold">{data?.name}</h2>
                     <p className="text-sm font-semibold text-blue-600 mb-6">
@@ -99,7 +99,7 @@ const Page = () => {
                 </p>
 
                 {/* Stats */}
-                <div className="p-4 rounded-lg bg-slate-200 dark:bg-[#141c30] grid grid-cols-3 mb-6   shadow-md">
+                <div className="p-4 rounded-lg bg-slate-200 dark:bg-[#141c30] grid grid-cols-3 mb-6 shadow-md">
                   <div>
                     <p className="mb-2">Repo</p>
                     <p>
